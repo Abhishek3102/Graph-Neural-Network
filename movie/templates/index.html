@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, #f3a683, #b8e994);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #ccc;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            background-color: #f39c12;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #e67e22;
+        }
+
+        .recommendations-container {
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .movie-list {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .movie-item {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-item h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .movie-item p {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .row {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .row {
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .form-container, .recommendations {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Movie Recommendation System</h1>
+        <div class="row">
+            <div class="form-container">
+                <form action="/recommend" method="post">
+                    <div class="form-group">
+                        <label for="user_id">Enter User ID (e.g., user_0):</label>
+                        <input type="text" id="user_id" name="user_id" value="{{ user_input or '' }}" required>
+                    </div>
+                    <button type="submit">Recommend Movies</button>
+                </form>
+            </div>
+            
+            <div class="recommendations">
+                {% if user_input %}
+                    <div class="recommendations-container">
+                        {% if movies %}
+                            <div class="movie-list">
+                                {% for movie in movies %}
+                                    <div class="movie-item">
+                                        <h3>{{ movie.title }} ({{ movie.genres }})</h3>
+                                        <p>Predicted Strength: {{ movie.score }}</p>
+                                        <p>Actual Interaction: {{ movie.interaction }}</p>
+                                        <p>Popularity: {{ movie.popularity }}</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% elif error %}
+                            <div class="error">{{ error }}</div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
